@@ -70,9 +70,11 @@ endif()
 
 if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-    add_definitions(-Dinline=__inline)
-    add_definitions(-Dsnprintf=_snprintf)
     add_definitions(-Dstrncasecmp=_strnicmp)
+    if(MSVC_VERSION VERSION_LESS 1900)
+        add_definitions(-Dinline=__inline)
+        add_definitions(-Dsnprintf=_snprintf)
+    endif()
 endif()
 
 add_library(cjson MODULE lua_cjson.c strbuf.c ${FPCONV_SOURCES})
