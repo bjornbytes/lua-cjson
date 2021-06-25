@@ -1304,7 +1304,10 @@ static int json_decode(lua_State *l)
 
 /* ===== INITIALISATION ===== */
 
-#if !defined(LUA_VERSION_NUM) || LUA_VERSION_NUM < 502
+// Awkward: If you're using Lua 5.2, it will nicely define LUA_VERSION_NUM=502.
+// But if you're using lauxlib.h from LuaJIT, it defines LUA_VERSION_NUM=501
+// despite implementing some Lua 5.2 functions. As a kludge, we check for another 5.2 symbol it defines:
+#if !defined(luaL_setfuncs) && (!defined(LUA_VERSION_NUM) || LUA_VERSION_NUM < 502)
 /* Compatibility for Lua 5.1.
  *
  * luaL_setfuncs() is used to create a module table where the functions have
